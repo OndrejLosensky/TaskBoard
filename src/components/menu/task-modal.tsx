@@ -32,10 +32,10 @@ const TaskModal: React.FC<TaskModalProps> = ({ onClose, onAddTask }) => {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 backdrop-blur-sm">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10 backdrop-blur-sm">
             <motion.div
                 ref={modalRef}
-                className="bg-white p-4 rounded shadow-md min-w-96"
+                className="bg-white p-4 rounded-lg shadow-md min-w-[450px]"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
@@ -51,7 +51,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ onClose, onAddTask }) => {
                         placeholder="Jméno úkolu..."
                     />
                     <div className="mt-4 flex justify-between">
-                        <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 duration-200 active:scale-90 text-white rounded p-2">Přidat</button>
+                        <button type="submit" className="w-full bg-violet-500 hover:bg-violete-600 duration-200 active:scale-90 text-white rounded p-2">Přidat</button>
                     </div>
                 </form>
             </motion.div>

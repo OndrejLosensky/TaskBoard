@@ -18,46 +18,75 @@ interface ContainerData {
 
 function App() {
     const [containers, setContainers] = useState<ContainerData[]>([]);
-    const [selectedContainer] = useState<ContainerData | null>(null);
     const [isModalOpen, setModalOpen] = useState(false);
+    const [modalContainer, setModalContainer] = useState<ContainerData | null>(null);
 
     useEffect(() => {
         const storedContainers = localStorage.getItem('containers');
         if (storedContainers) {
-            setContainers(JSON.parse(storedContainers));
+            try {
+                const parsedContainers = JSON.parse(storedContainers);
+                console.log("Loaded containers from local storage:", parsedContainers);
+                setContainers(parsedContainers);
+            } catch (error) {
+                console.error('Failed to parse stored containers:', error);
+                setContainers([]); // Set to empty array on error
+            }
+        } else {
+            console.log("No containers found in local storage.");
         }
     }, []);
 
+    // Save containers to local storage whenever it changes
     useEffect(() => {
         localStorage.setItem('containers', JSON.stringify(containers));
+        console.log("Saved containers to local storage:", containers);
     }, [containers]);
 
     const handleAddContainer = (name: string) => {
-        const newContainer = { id: Date.now(), name, tasks: [] }; 
-        setContainers([...containers, newContainer]);
+        const newContainer: ContainerData = { id: Date.now(), name, tasks: [] }; 
+        setContainers(prev => [...prev, newContainer]); // Functional state update
     };
 
+
     const handleAddTask = (containerId: number, taskName: string) => {
-        const updatedContainers = containers.map(container => {
-            if (container.id === containerId) {
-                const newTask = { id: Date.now(), name: taskName };
-                return { ...container, tasks: [...container.tasks, newTask] }; 
-            }
-            return container;
-        });
-        setContainers(updatedContainers); 
+        const newTask: Task = { id: Date.now(), name: taskName };
+        setContainers((prev) =>
+            prev.map(container =>
+                container.id === containerId
+                    ? { ...container, tasks: [...container.tasks, newTask] }
+                    : container
+            )
+        );
     };
 
     const handleUpdateContainer = (id: number, newName: string) => {
-        const updatedContainers = containers.map(container =>
-            container.id === id ? { ...container, name: newName } : container
+        setContainers((prev) =>
+            prev.map(container =>
+                container.id === id ? { ...container, name: newName } : container
+            )
         );
-        setContainers(updatedContainers);
     };
 
     const handleDeleteContainer = (id: number) => {
-        const updatedContainers = containers.filter(container => container.id !== id);
-        setContainers(updatedContainers);
+        setContainers((prev) => prev.filter(container => container.id !== id));
+    };
+
+    const handleDeleteTask = (containerId: number, taskId: number) => {
+        setContainers((prev) =>
+            prev.map(container => {
+                if (container.id === containerId) {
+                    const updatedTasks = container.tasks.filter(task => task.id !== taskId);
+                    return { ...container, tasks: updatedTasks };
+                }
+                return container;
+            })
+        );
+    };
+
+    const openAddContainerModal = () => {
+        setModalContainer(null);
+        setModalOpen(true);
     };
 
     return (
@@ -69,9 +98,9 @@ function App() {
 
             <Navigation onAddContainer={handleAddContainer} />
 
-            {isModalOpen && selectedContainer && (
+            {isModalOpen && (
                 <ContainerModal
-                    container={selectedContainer}
+                    container={modalContainer || { id: 0, name: '', tasks: [] }}
                     onClose={() => setModalOpen(false)}
                     onUpdate={handleUpdateContainer}
                     onDelete={handleDeleteContainer}
@@ -87,6 +116,22 @@ function App() {
                             name={container.name}
                             tasks={container.tasks}
                             onAddTask={handleAddTask}
+                            onDeleteContainer={handleDeleteContainer}
+                            onUpdateContainer={handleUpdateContainer}
+                            onDeleteTask={handleDeleteTask}
+                            onUpdateTask={(containerId, taskId, newName) => {
+                                setContainers(prev => 
+                                    prev.map(container => {
+                                        if (container.id === containerId) {
+                                            const updatedTasks = container.tasks.map(task => 
+                                                task.id === taskId ? { ...task, name: newName } : task
+                                            );
+                                            return { ...container, tasks: updatedTasks };
+                                        }
+                                        return container;
+                                    })
+                                );
+                            }}
                         />
                     ))}
                 </div>
