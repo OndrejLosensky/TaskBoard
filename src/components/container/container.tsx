@@ -8,7 +8,7 @@ import TaskModal from '../menu/task-modal';
 interface Task {
     id: number;
     name: string;
-    isDone: boolean; // Add a new property to track completion status
+    isDone: boolean;
 }
 
 interface ContainerProps {
@@ -19,8 +19,8 @@ interface ContainerProps {
     onDeleteContainer: (containerId: number) => void;
     onUpdateContainer: (containerId: number, newName: string) => void;
     onUpdateTask: (containerId: number, taskId: number, newName: string) => void;
-    onDeleteTask: (containerId: number, taskId: number) => void; 
-    onToggleTaskCompletion: (containerId: number, taskId: number, isDone: boolean) => void; // New prop for toggling task completion
+    onDeleteTask: (containerId: number, taskId: number) => void;
+    onToggleTaskCompletion: (containerId: number, taskId: number, isDone: boolean) => void;
 }
 
 const Container: React.FC<ContainerProps> = ({
@@ -32,7 +32,7 @@ const Container: React.FC<ContainerProps> = ({
     onUpdateContainer,
     onUpdateTask,
     onDeleteTask,
-    onToggleTaskCompletion // Receive the prop
+    onToggleTaskCompletion
 }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -76,7 +76,7 @@ const Container: React.FC<ContainerProps> = ({
     };
 
     const handleToggleTaskCompletion = (taskId: number, isDone: boolean) => {
-        onToggleTaskCompletion(id, taskId, isDone); // Call the function passed from the parent
+        onToggleTaskCompletion(id, taskId, isDone); 
     };
 
     useEffect(() => {
@@ -93,9 +93,9 @@ const Container: React.FC<ContainerProps> = ({
     }, [dropdownRef]);
 
     return (
-        <div className="bg-gray-200 px-4 py-2 rounded shadow-md border border-black/20 hover:border-black/30 duration-300 flex flex-col h-full">
-            <div className='flex flex-row justify-between items-center'>
-                <h2 className="text-md font-medium text-blue-950">{name}</h2>
+        <div className={`bg-neutral-100 rounded shadow-md border border-black/20 hover:border-black/30 duration-300 flex flex-col h-full`}>
+            <div className={`flex flex-row justify-between items-center py-2 px-4`}>
+                <h2 className={`text-md font-medium`}>{name}</h2>
                 <div className="relative" ref={dropdownRef}>                    
                     <HiDotsVertical onClick={toggleDropdown} className='w-4 h-4 cursor-pointer opacity-90' />
                     {isDropdownOpen && (
@@ -117,7 +117,7 @@ const Container: React.FC<ContainerProps> = ({
                 </div>
             </div>
 
-            <div className="flex-grow mt-4 flex flex-col">
+            <div className="flex-grow mt-4 flex flex-col px-4 py-2">
                 <ul className='space-y-2 overflow-y-auto flex-grow'>
                     {tasks.map((task) => (
                         <li
@@ -128,7 +128,7 @@ const Container: React.FC<ContainerProps> = ({
                                 <input
                                     type="checkbox"
                                     checked={task.isDone}
-                                    onChange={() => handleToggleTaskCompletion(task.id, !task.isDone)} // Toggle task completion
+                                    onChange={() => handleToggleTaskCompletion(task.id, !task.isDone)} 
                                     className="rounded-full accent-blue-500 cursor-pointer"
                                 />
                                 <span className={`flex-grow ${task.isDone ? 'line-through text-gray-500' : ''}`}>
@@ -154,6 +154,7 @@ const Container: React.FC<ContainerProps> = ({
                 onUpdate={onUpdateContainer}
                 containerId={id}
                 initialName={name}
+                // backgroundColor={backgroundColor}
             />
 
             {/* Edit Task Modal */}

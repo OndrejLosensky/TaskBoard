@@ -1,50 +1,38 @@
-# React + TypeScript + Vite
+## Task Manager App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Notion/Trello-like task management application built with React, TypeScript, and TailwindCSS. Create, manage, and organize your tasks and projects effortlessly.
 
-Currently, two official plugins are available:
+### Features
+- Create and manage multiple task containers.
+- Add, edit, and delete tasks within containers.
+- Mark tasks as completed or pending.
+- Customizable background colors for each container.
+- Responsive design for optimal viewing on various devices.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+####  coming soon
+- drag and drop containers
+- re-order tasks inside containers
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Made using 
+- React
+- TypeScript
+- TailwindCSS
+- Local Storage
+- framer-motion
+- react-icons
 
-- Configure the top-level `parserOptions` property like this:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Usage
+- Click on "Add Container" to create a new task container.
+- Inside each container, add tasks, mark them as completed, or edit/delete as needed.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+___ 
+*Feel free to modify any sections to better fit your app's specific features or your personal style!*
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+
+
+
+
+
