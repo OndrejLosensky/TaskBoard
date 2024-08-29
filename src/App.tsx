@@ -19,7 +19,7 @@ interface ContainerData {
 function App() {
     const [containers, setContainers] = useState<ContainerData[]>([]);
     const [isModalOpen, setModalOpen] = useState(false);
-    const [modalContainer, setModalContainer] = useState<ContainerData | null>(null);
+    const [modalContainer] = useState<ContainerData | null>(null);
 
     useEffect(() => {
         const storedContainers = localStorage.getItem('containers');
@@ -82,11 +82,6 @@ function App() {
                 return container;
             })
         );
-    };
-
-    const openAddContainerModal = () => {
-        setModalContainer(null);
-        setModalOpen(true);
     };
 
     return (
