@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet';
 interface Task {
     id: number;
     name: string;
-    isDone: boolean; // New property to track task completion status
+    isDone: boolean; 
 }
 
 interface ContainerData {
@@ -141,7 +141,7 @@ function App() {
                                     })
                                 );
                             }}
-                            onToggleTaskCompletion={handleToggleTaskCompletion} // Pass the toggle function
+                            onToggleTaskCompletion={handleToggleTaskCompletion} 
                         />
                     ))}
                 </div>
