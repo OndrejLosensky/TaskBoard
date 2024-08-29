@@ -8,6 +8,7 @@ import TaskModal from '../menu/task-modal';
 interface Task {
     id: number;
     name: string;
+    isDone: boolean; // Add a new property to track completion status
 }
 
 interface ContainerProps {
@@ -19,6 +20,7 @@ interface ContainerProps {
     onUpdateContainer: (containerId: number, newName: string) => void;
     onUpdateTask: (containerId: number, taskId: number, newName: string) => void;
     onDeleteTask: (containerId: number, taskId: number) => void; 
+    onToggleTaskCompletion: (containerId: number, taskId: number, isDone: boolean) => void; // New prop for toggling task completion
 }
 
 const Container: React.FC<ContainerProps> = ({
@@ -30,6 +32,7 @@ const Container: React.FC<ContainerProps> = ({
     onUpdateContainer,
     onUpdateTask,
     onDeleteTask,
+    onToggleTaskCompletion // Receive the prop
 }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -72,6 +75,10 @@ const Container: React.FC<ContainerProps> = ({
         setIsEditTaskModalOpen(false); 
     };
 
+    const handleToggleTaskCompletion = (taskId: number, isDone: boolean) => {
+        onToggleTaskCompletion(id, taskId, isDone); // Call the function passed from the parent
+    };
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -86,7 +93,7 @@ const Container: React.FC<ContainerProps> = ({
     }, [dropdownRef]);
 
     return (
-        <div className="bg-gray-200 px-4 py-2 rounded shadow-md border border-black/20 hover:border-black/30 duration-300 flex flex-col">
+        <div className="bg-gray-200 px-4 py-2 rounded shadow-md border border-black/20 hover:border-black/30 duration-300 flex flex-col h-full">
             <div className='flex flex-row justify-between items-center'>
                 <h2 className="text-md font-medium text-blue-950">{name}</h2>
                 <div className="relative" ref={dropdownRef}>                    
@@ -110,27 +117,35 @@ const Container: React.FC<ContainerProps> = ({
                 </div>
             </div>
 
-            <div className="mt-4">
-                <ul className='space-y-2'>
+            <div className="flex-grow mt-4 flex flex-col">
+                <ul className='space-y-2 overflow-y-auto flex-grow'>
                     {tasks.map((task) => (
                         <li
                             key={task.id}
-                            onClick={() => openEditTaskModal(task)}
                             className="py-2 bg-white w-full px-4 shadow-sm border border-black/20 flex flex-row items-center justify-between rounded-md hover:cursor-grab"
                         >
-                            <span>{task.name}</span>
+                            <label className="flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    checked={task.isDone}
+                                    onChange={() => handleToggleTaskCompletion(task.id, !task.isDone)} // Toggle task completion
+                                    className="rounded-full accent-blue-500 cursor-pointer"
+                                />
+                                <span className={`flex-grow ${task.isDone ? 'line-through text-gray-500' : ''}`}>
+                                    {task.name}
+                                </span>
+                            </label>
                             <TbGridDots className='opacity-50' onClick={() => openEditTaskModal(task)} />
                         </li>
                     ))}
                 </ul>
+                <button
+                    onClick={openTaskModal}
+                    className="mt-auto duration-200 hover:bg-gray-500/30 text-neutral-700 rounded p-2"
+                >
+                    Přidat nový úkol
+                </button>
             </div>
-
-            <button
-                onClick={openTaskModal}
-                className="mt-4 duration-200 hover:bg-gray-500/30 text-neutral-700 rounded p-2"
-            >
-                Přidat nový úkol
-            </button>
 
             {/* Edit Container Modal */}
             <EditContainerModal

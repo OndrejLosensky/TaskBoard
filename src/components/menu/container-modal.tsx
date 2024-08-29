@@ -21,6 +21,12 @@ const ContainerModal: React.FC<ContainerModalProps> = ({
         onClose(); 
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleSubmit(e);
+        }
+    };
+
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-5 rounded-lg shadow-lg w-80">
@@ -31,6 +37,7 @@ const ContainerModal: React.FC<ContainerModalProps> = ({
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="border p-2 rounded w-full mt-2"
+                        onKeyDown={handleKeyDown} 
                     />
                     <div className="mt-4 flex justify-end">
                         <button

@@ -4,12 +4,13 @@ import { motion } from 'framer-motion';
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onCreate: (name: string) => void; // This function should handle the actual creation logic
+    onCreate: (name: string) => void; 
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
     const [name, setName] = useState('');
     const modalRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -19,7 +20,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
         };
 
         if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
+            document.addEventListener('mousedown', handleClickOutside);            
+            inputRef.current?.focus();
         }
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
@@ -29,9 +31,15 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (name.trim()) {
-            onCreate(name); // Call the onCreate function to handle creation
+            onCreate(name);
             setName('');
             onClose();
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleSubmit(e);
         }
     };
 
@@ -48,13 +56,15 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onCreate }) => {
                 transition={{ duration: 0.3 }}
             >
                 <h2 className="text-2xl font-semibold mb-4">Vytvořit nový blok</h2>
-                <form onSubmit={handleSubmit}> 
+                <form onSubmit={handleSubmit}>
                     <input 
                         type="text" 
                         className="border border-gray-300 p-2 w-full rounded mb-4" 
                         placeholder="Jméno listu"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        onKeyDown={handleKeyDown} 
+                        ref={inputRef} 
                         autoFocus 
                     />
                     <div className="flex justify-end gap-x-2">

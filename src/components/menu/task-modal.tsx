@@ -49,6 +49,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ onClose, onAddTask }) => {
                         onChange={(e) => setTaskName(e.target.value)}
                         className="border rounded p-2 w-full"
                         placeholder="Jméno úkolu..."
+                        autoFocus
                     />
                     <div className="mt-4 flex justify-between">
                         <button type="submit" className="w-full bg-violet-500 hover:bg-violete-600 duration-200 active:scale-90 text-white rounded p-2">Přidat</button>

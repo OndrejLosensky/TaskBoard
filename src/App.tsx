@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet';
 interface Task {
     id: number;
     name: string;
+    isDone: boolean; // New property to track task completion status
 }
 
 interface ContainerData {
@@ -30,14 +31,13 @@ function App() {
                 setContainers(parsedContainers);
             } catch (error) {
                 console.error('Failed to parse stored containers:', error);
-                setContainers([]); // Set to empty array on error
+                setContainers([]); 
             }
         } else {
             console.log("No containers found in local storage.");
         }
     }, []);
-
-    // Save containers to local storage whenever it changes
+   
     useEffect(() => {
         localStorage.setItem('containers', JSON.stringify(containers));
         console.log("Saved containers to local storage:", containers);
@@ -45,12 +45,11 @@ function App() {
 
     const handleAddContainer = (name: string) => {
         const newContainer: ContainerData = { id: Date.now(), name, tasks: [] }; 
-        setContainers(prev => [...prev, newContainer]); // Functional state update
+        setContainers(prev => [...prev, newContainer]); 
     };
 
-
     const handleAddTask = (containerId: number, taskName: string) => {
-        const newTask: Task = { id: Date.now(), name: taskName };
+        const newTask: Task = { id: Date.now(), name: taskName, isDone: false }; // Set isDone to false
         setContainers((prev) =>
             prev.map(container =>
                 container.id === containerId
@@ -84,11 +83,26 @@ function App() {
         );
     };
 
+    const handleToggleTaskCompletion = (containerId: number, taskId: number, isDone: boolean) => {
+        setContainers(prev =>
+            prev.map(container => {
+                if (container.id === containerId) {
+                    const updatedTasks = container.tasks.map(task =>
+                        task.id === taskId ? { ...task, isDone } : task
+                    );
+                    return { ...container, tasks: updatedTasks };
+                }
+                return container;
+            })
+        );
+    };
+
     return (
         <main className="w-screen h-screen bg-neutral-100">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>TaskBoard</title>
+                <link rel="icon" type="image/png" href="favicon.ico" sizes="16x16" />
             </Helmet>
 
             <Navigation onAddContainer={handleAddContainer} />
@@ -127,6 +141,7 @@ function App() {
                                     })
                                 );
                             }}
+                            onToggleTaskCompletion={handleToggleTaskCompletion} // Pass the toggle function
                         />
                     ))}
                 </div>

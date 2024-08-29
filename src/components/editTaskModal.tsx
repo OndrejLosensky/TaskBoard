@@ -2,10 +2,8 @@ import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { BsCardHeading } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { Button } from "../../components/ui/button";
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-
-import { useEffect } from "react";
 
 interface EditTaskModalProps {
     isOpen: boolean;
@@ -30,6 +28,7 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
 }) => {
     const [name, setName] = useState(initialName);
     const modalRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -39,15 +38,26 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
         };
 
         document.addEventListener('mousedown', handleClickOutside);
+        if (isOpen) {
+            inputRef.current?.focus();
+        }
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [onClose]);
+    }, [isOpen, onClose]);
 
-    const handleSubmit = () => {
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleSubmit(e);
+        }
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault(); 
         if (name.trim()) {
-            onUpdate(containerId, taskId, name); 
-            setName(''); 
+            onUpdate(containerId, taskId, name);
+            setName(initialName); 
             onClose();
         }
     };
@@ -88,6 +98,9 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
                     placeholder="Nové jméno úkolu..."
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    ref={inputRef} 
+                    autoFocus
                 />
                 <div className="flex justify-end gap-x-2">
                     <button
