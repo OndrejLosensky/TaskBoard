@@ -141,7 +141,7 @@ const Container: React.FC<ContainerProps> = ({
                 </ul>
                 <button
                     onClick={openTaskModal}
-                    className="mt-auto duration-200 hover:bg-gray-500/30 text-neutral-700 rounded p-2"
+                    className="mt-2 duration-200 hover:bg-gray-500/30 text-neutral-700 rounded p-2"
                 >
                     Přidat nový úkol
                 </button>
@@ -154,7 +154,6 @@ const Container: React.FC<ContainerProps> = ({
                 onUpdate={onUpdateContainer}
                 containerId={id}
                 initialName={name}
-                // backgroundColor={backgroundColor}
             />
 
             {/* Edit Task Modal */}

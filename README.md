@@ -1,4 +1,4 @@
-## Task Manager App
+# Task Manager App
 
 A Notion/Trello-like task management application built with React, TypeScript, and TailwindCSS. Create, manage, and organize your tasks and projects effortlessly.
 
