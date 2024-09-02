@@ -28,9 +28,6 @@ A Notion/Trello-like task management application built with React, TypeScript, a
 - Inside each container, add tasks, mark them as completed, or edit/delete as needed.
 
 
-___ 
-*Feel free to modify any sections to better fit your app's specific features or your personal style!*
-
 
 
 
